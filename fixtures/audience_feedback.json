@@ -1,8 +1,974 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "record_id": "sample-008",
   "domain": "feedback_proof",
   "occurred_at": "2026-09-20T09:00:00+08:00",
-  "revision": 1,
-  "source": "业务样例"
+  "revision": 2,
+  "source": "业务样例",
+  "migration": {
+    "from_version": 1,
+    "notes": "v1 仅承载记录标识（record_id/domain/occurred_at/revision/source）；v2 保留全部既有字段与含义，仅追加互动规则、投票、评论主题、创作者回应、内容版本、调整台账、计票运行、订阅者承诺、意见聚类与奖励结算结构。读取 v1 的旧代码忽略新字段即可，无需数据搬迁。"
+  },
+  "actors": [
+    {
+      "actor_id": "ed-01",
+      "role": "editor_in_chief",
+      "name": "沈黛"
+    },
+    {
+      "actor_id": "ed-02",
+      "role": "editor",
+      "name": "陆衡"
+    },
+    {
+      "actor_id": "cr-01",
+      "role": "creator",
+      "name": "秦朗"
+    }
+  ],
+  "interactions": [
+    {
+      "interaction_id": "poll-ep201-subplot",
+      "kind": "live_poll",
+      "title": "是否删除苏晚人物支线（第201集直播场）",
+      "starts_at": "2026-09-18T20:00:00+08:00",
+      "closes_at": "2026-09-18T21:00:00+08:00",
+      "rule_version": "rv-2026-09-18-a",
+      "locked_at": "2026-09-18T19:55:00+08:00",
+      "locked_by": "ed-01",
+      "rules_hash": "sha256:cb3cfaae7a4898ebecc694e1d39656ef4a435cabd22f229864f1b6252727cfb0",
+      "options": [
+        {
+          "option_id": "opt-cut",
+          "label": "删除苏晚支线"
+        },
+        {
+          "option_id": "opt-keep",
+          "label": "保留苏晚支线"
+        }
+      ],
+      "eligibility": {
+        "rule": "本场有效资格以 2026-09-18T20:00:00+08:00 冻结的购票/订阅快照 snap-elig-20260918 为准；游客无权重。",
+        "snapshot_ref": "snap-elig-20260918",
+        "frozen_at": "2026-09-18T20:00:00+08:00",
+        "weight_classes": [
+          {
+            "class": "paid_subscriber",
+            "weight": 1
+          },
+          {
+            "class": "single_ticket_viewer",
+            "weight": 1
+          },
+          {
+            "class": "guest",
+            "weight": 0
+          }
+        ],
+        "refund_clause": "结算完成前退款的订单，其对应投票不具备有效资格（规则在互动开始前锁定，非事后追加）。",
+        "identity_clause": "跨平台账号按合并台账归一为同一参与者，同一参与者在同一互动中仅保留截止时间前最后一票。"
+      },
+      "editorial_boundaries": {
+        "non_delegable": [
+          "主线人物的生死与世界观结局",
+          "已发布章节、镜头的内容（重算只能进入新版本）",
+          "作品价值观与法律合规底线"
+        ],
+        "delegable_advisory": [
+          "单一支线篇幅取舍的建议权（采纳与否仍需创作者决定并记录理由）"
+        ],
+        "heat_is_not_a_command": true
+      },
+      "amendments": []
+    }
+  ],
+  "identities": [
+    {
+      "identity_id": "id-001",
+      "display_name": "观众A",
+      "tier": "paid_subscriber",
+      "merged_accounts": [
+        {
+          "platform": "live",
+          "account_ref": "acc-lin-live",
+          "merged_at": "2026-09-10T12:00:00+08:00",
+          "basis": "实名手机号一致，经本人二次确认",
+          "evidence_ref": "doc-merge-001"
+        },
+        {
+          "platform": "webnovel",
+          "account_ref": "acc-lin-book",
+          "merged_at": "2026-09-10T12:00:00+08:00",
+          "basis": "实名手机号一致，经本人二次确认",
+          "evidence_ref": "doc-merge-001"
+        }
+      ],
+      "refunded_at": null
+    },
+    {
+      "identity_id": "id-002",
+      "display_name": "观众B",
+      "tier": "paid_subscriber",
+      "merged_accounts": [
+        {
+          "platform": "live",
+          "account_ref": "acc-gu-live",
+          "merged_at": null,
+          "basis": "单一平台账号",
+          "evidence_ref": null
+        }
+      ],
+      "refunded_at": "2026-09-19T10:30:00+08:00",
+      "refund_order_ref": "ord-7742",
+      "refund_evidence_ref": "doc-refund-7742"
+    },
+    {
+      "identity_id": "id-003",
+      "display_name": "观众C",
+      "tier": "guest",
+      "merged_accounts": [
+        {
+          "platform": "live",
+          "account_ref": "acc-mei-guest",
+          "merged_at": null,
+          "basis": "游客身份，未购票",
+          "evidence_ref": null
+        }
+      ],
+      "refunded_at": null
+    },
+    {
+      "identity_id": "id-004",
+      "display_name": "观众D",
+      "tier": "paid_subscriber",
+      "merged_accounts": [
+        {
+          "platform": "live",
+          "account_ref": "acc-zhou-live",
+          "merged_at": null,
+          "basis": "单一平台账号",
+          "evidence_ref": null
+        }
+      ],
+      "refunded_at": null
+    },
+    {
+      "identity_id": "id-006",
+      "display_name": "观众F",
+      "tier": "paid_subscriber",
+      "merged_accounts": [
+        {
+          "platform": "live",
+          "account_ref": "acc-han-live",
+          "merged_at": null,
+          "basis": "单一平台账号",
+          "evidence_ref": null
+        }
+      ],
+      "refunded_at": null
+    },
+    {
+      "identity_id": "id-007",
+      "display_name": "观众G",
+      "tier": "paid_subscriber",
+      "merged_accounts": [
+        {
+          "platform": "live",
+          "account_ref": "acc-jiang-live",
+          "merged_at": null,
+          "basis": "单一平台账号",
+          "evidence_ref": null
+        }
+      ],
+      "refunded_at": null
+    },
+    {
+      "identity_id": "id-005",
+      "display_name": "读者E",
+      "tier": "paid_subscriber",
+      "merged_accounts": [
+        {
+          "platform": "webnovel",
+          "account_ref": "acc-che-book",
+          "merged_at": null,
+          "basis": "单一平台账号",
+          "evidence_ref": null
+        }
+      ],
+      "refunded_at": null
+    },
+    {
+      "identity_id": "id-201",
+      "display_name": "迟到观众",
+      "tier": "paid_subscriber",
+      "merged_accounts": [
+        {
+          "platform": "live",
+          "account_ref": "acc-late-live",
+          "merged_at": null,
+          "basis": "单一平台账号",
+          "evidence_ref": null
+        }
+      ],
+      "refunded_at": null
+    }
+  ],
+  "coordination_clusters": [
+    {
+      "cluster_id": "cl-sybil-01",
+      "detected_at": "2026-09-19T16:00:00+08:00",
+      "account_refs": [
+        "acc-bot-100",
+        "acc-bot-101",
+        "acc-bot-102",
+        "acc-bot-103"
+      ],
+      "identity_id": null,
+      "signals": [
+        "四个账号同设备指纹、同 IP 段，注册时间均在开播前 9 分钟内",
+        "支付手段关联同一批礼品卡，投票时间戳间隔均小于 1.2 秒",
+        "除该投票外无任何观看时长、评论或订阅记录"
+      ],
+      "evidence_ref": "doc-fraud-01"
+    }
+  ],
+  "votes": [
+    {
+      "vote_id": "v-001",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-lin-live",
+      "identity_id": "id-001",
+      "platform": "live",
+      "option_id": "opt-cut",
+      "cast_at": "2026-09-18T20:05:00+08:00",
+      "revoked_at": null
+    },
+    {
+      "vote_id": "v-002",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-lin-book",
+      "identity_id": "id-001",
+      "platform": "webnovel",
+      "option_id": "opt-keep",
+      "cast_at": "2026-09-18T20:40:00+08:00",
+      "revoked_at": null
+    },
+    {
+      "vote_id": "v-003",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-gu-live",
+      "identity_id": "id-002",
+      "platform": "live",
+      "option_id": "opt-cut",
+      "cast_at": "2026-09-18T20:10:00+08:00",
+      "revoked_at": null
+    },
+    {
+      "vote_id": "v-004",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-mei-guest",
+      "identity_id": "id-003",
+      "platform": "live",
+      "option_id": "opt-cut",
+      "cast_at": "2026-09-18T20:11:00+08:00",
+      "revoked_at": null
+    },
+    {
+      "vote_id": "v-005",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-zhou-live",
+      "identity_id": "id-004",
+      "platform": "live",
+      "option_id": "opt-keep",
+      "cast_at": "2026-09-18T20:12:00+08:00",
+      "revoked_at": null
+    },
+    {
+      "vote_id": "v-100",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-bot-100",
+      "identity_id": null,
+      "platform": "live",
+      "option_id": "opt-cut",
+      "cast_at": "2026-09-18T20:30:00+08:00",
+      "revoked_at": null
+    },
+    {
+      "vote_id": "v-101",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-bot-102",
+      "identity_id": null,
+      "platform": "live",
+      "option_id": "opt-cut",
+      "cast_at": "2026-09-18T20:30:01+08:00",
+      "revoked_at": null
+    },
+    {
+      "vote_id": "v-102",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-bot-101",
+      "identity_id": null,
+      "platform": "live",
+      "option_id": "opt-cut",
+      "cast_at": "2026-09-18T20:30:02+08:00",
+      "revoked_at": null
+    },
+    {
+      "vote_id": "v-103",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-bot-103",
+      "identity_id": null,
+      "platform": "live",
+      "option_id": "opt-cut",
+      "cast_at": "2026-09-18T20:30:03+08:00",
+      "revoked_at": null
+    },
+    {
+      "vote_id": "v-201",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-late-live",
+      "identity_id": "id-201",
+      "platform": "live",
+      "option_id": "opt-cut",
+      "cast_at": "2026-09-18T21:10:00+08:00",
+      "revoked_at": null,
+      "note": "渠道补传，送达时已过截止时间"
+    },
+    {
+      "vote_id": "v-301",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-han-live",
+      "identity_id": "id-006",
+      "platform": "live",
+      "option_id": "opt-cut",
+      "cast_at": "2026-09-18T20:15:00+08:00",
+      "revoked_at": "2026-09-18T20:50:00+08:00"
+    },
+    {
+      "vote_id": "v-302",
+      "interaction_id": "poll-ep201-subplot",
+      "account_ref": "acc-jiang-live",
+      "identity_id": "id-007",
+      "platform": "live",
+      "option_id": "opt-keep",
+      "cast_at": "2026-09-18T20:20:00+08:00",
+      "revoked_at": null
+    }
+  ],
+  "adjustments_ledger": [
+    {
+      "adjustment_id": "adj-001",
+      "interaction_id": "poll-ep201-subplot",
+      "kind": "identity_dedup",
+      "effect": "dedup_vote",
+      "target_vote_ids": [
+        "v-001"
+      ],
+      "kept_vote_id": "v-002",
+      "target_identity_ids": [
+        "id-001"
+      ],
+      "basis": "id-001 已按 doc-merge-001 完成直播端与网文端账号合并；同一参与者仅截止前最后一票有效，故保留 20:40 的 v-002，排除 20:05 的 v-001。",
+      "rule_clause": "eligibility.identity_clause",
+      "evidence_ref": "doc-merge-001",
+      "decided_by": "ed-02",
+      "decided_at": "2026-09-20T07:10:00+08:00"
+    },
+    {
+      "adjustment_id": "adj-002",
+      "interaction_id": "poll-ep201-subplot",
+      "kind": "refund_exclusion",
+      "effect": "exclude_vote",
+      "target_vote_ids": [
+        "v-003"
+      ],
+      "target_identity_ids": [
+        "id-002"
+      ],
+      "basis": "订单 ord-7742 于 2026-09-19 完成退款，早于本次结算；按互动开始前锁定的退款条款，该票失去有效资格。",
+      "rule_clause": "eligibility.refund_clause",
+      "evidence_ref": "doc-refund-7742",
+      "decided_by": "ed-02",
+      "decided_at": "2026-09-20T07:15:00+08:00"
+    },
+    {
+      "adjustment_id": "adj-003",
+      "interaction_id": "poll-ep201-subplot",
+      "kind": "ineligible_weight",
+      "effect": "exclude_vote",
+      "target_vote_ids": [
+        "v-004"
+      ],
+      "target_identity_ids": [
+        "id-003"
+      ],
+      "basis": "id-003 为游客，未出现在冻结资格快照 snap-elig-20260918 中，权重为 0。",
+      "rule_clause": "eligibility.rule",
+      "evidence_ref": "snap-elig-20260918",
+      "decided_by": "ed-02",
+      "decided_at": "2026-09-20T07:20:00+08:00"
+    },
+    {
+      "adjustment_id": "adj-004",
+      "interaction_id": "poll-ep201-subplot",
+      "kind": "coordinated_cluster",
+      "effect": "exclude_cluster",
+      "target_vote_ids": [
+        "v-100",
+        "v-101",
+        "v-102",
+        "v-103"
+      ],
+      "target_cluster_id": "cl-sybil-01",
+      "target_identity_ids": [],
+      "basis": "四票经 doc-fraud-01 认定为同设备同支付手段的协同刷票，整体排除；该簇解释了直播画面上 opt-cut 的异常峰值。",
+      "rule_clause": "editorial_boundaries.heat_is_not_a_command",
+      "evidence_ref": "doc-fraud-01",
+      "decided_by": "ed-01",
+      "decided_at": "2026-09-20T07:40:00+08:00"
+    },
+    {
+      "adjustment_id": "adj-005",
+      "interaction_id": "poll-ep201-subplot",
+      "kind": "withdrawal",
+      "effect": "exclude_vote",
+      "target_vote_ids": [
+        "v-301"
+      ],
+      "target_identity_ids": [
+        "id-006"
+      ],
+      "basis": "参与者在截止前于 20:50 主动撤票，平台撤回日志可查。",
+      "rule_clause": "eligibility.rule",
+      "evidence_ref": "log-withdraw-v-301",
+      "decided_by": "ed-02",
+      "decided_at": "2026-09-20T07:25:00+08:00"
+    },
+    {
+      "adjustment_id": "adj-006",
+      "interaction_id": "poll-ep201-subplot",
+      "kind": "late_data",
+      "effect": "mark_late",
+      "target_vote_ids": [
+        "v-201"
+      ],
+      "target_identity_ids": [
+        "id-201"
+      ],
+      "basis": "v-201 实际送达时间 21:10，晚于锁定截止时间 21:00；标记为迟到并留档，不计入任何正式计票运行，但在原始审计流中保留可见。",
+      "rule_clause": "closes_at",
+      "evidence_ref": "log-ingest-v-201",
+      "decided_by": "ed-02",
+      "decided_at": "2026-09-20T07:30:00+08:00"
+    }
+  ],
+  "comments": [
+    {
+      "comment_id": "cm-001",
+      "interaction_id": "poll-ep201-subplot",
+      "platform": "live",
+      "identity_id": "id-001",
+      "posted_at": "2026-09-18T20:31:00+08:00",
+      "theme_id": "th-001",
+      "text_ref": "脱敏文本：删除票一分钟内暴涨，像机器人"
+    },
+    {
+      "comment_id": "cm-002",
+      "interaction_id": "poll-ep201-subplot",
+      "platform": "live",
+      "identity_id": "id-004",
+      "posted_at": "2026-09-18T20:33:00+08:00",
+      "theme_id": "th-001",
+      "text_ref": "脱敏文本：付了钱的倒被刷票淹了，要求核查"
+    },
+    {
+      "comment_id": "cm-009",
+      "interaction_id": "poll-ep201-subplot",
+      "platform": "live",
+      "identity_id": "id-007",
+      "posted_at": "2026-09-18T20:35:00+08:00",
+      "theme_id": "th-001",
+      "text_ref": "脱敏文本：弹幕同一句话刷屏，肯定有组织"
+    },
+    {
+      "comment_id": "cm-003",
+      "interaction_id": "poll-ep201-subplot",
+      "platform": "live",
+      "identity_id": "id-004",
+      "posted_at": "2026-09-18T20:45:00+08:00",
+      "theme_id": "th-002",
+      "text_ref": "脱敏文本：苏晚别彻底删，戏份收一点就行"
+    },
+    {
+      "comment_id": "cm-004",
+      "interaction_id": "poll-ep201-subplot",
+      "platform": "webnovel",
+      "identity_id": "id-005",
+      "posted_at": "2026-09-19T22:10:00+08:00",
+      "theme_id": "th-002",
+      "text_ref": "脱敏文本：小说里苏晚还有伏笔，建议精简而非砍掉"
+    },
+    {
+      "comment_id": "cm-005",
+      "interaction_id": "poll-ep201-subplot",
+      "platform": "webnovel",
+      "identity_id": "id-005",
+      "posted_at": "2026-09-19T22:12:00+08:00",
+      "theme_id": "th-003",
+      "text_ref": "脱敏文本：作者都在讨论续篇了吧？第二季什么时候更"
+    },
+    {
+      "comment_id": "cm-006",
+      "interaction_id": "poll-ep201-subplot",
+      "platform": "webnovel",
+      "identity_id": "id-001",
+      "posted_at": "2026-09-19T22:20:00+08:00",
+      "theme_id": "th-003",
+      "text_ref": "脱敏文本：讨论不等于官宣，等正式说法"
+    }
+  ],
+  "support_tickets": [
+    {
+      "ticket_id": "tk-001",
+      "identity_id": "id-001",
+      "opened_at": "2026-09-18T21:20:00+08:00",
+      "cluster_id": "oc-001",
+      "text_ref": "脱敏文本：申请核查本场投票刷票并公开剔除前后结果"
+    }
+  ],
+  "comment_themes": [
+    {
+      "theme_id": "th-001",
+      "interaction_id": "poll-ep201-subplot",
+      "summary": "质疑删除票高声量来自有组织刷票，要求核查与公开",
+      "comment_ids": [
+        "cm-001",
+        "cm-002",
+        "cm-009"
+      ],
+      "cluster_id": "oc-001",
+      "emerged_at": "2026-09-18T20:35:00+08:00"
+    },
+    {
+      "theme_id": "th-002",
+      "interaction_id": "poll-ep201-subplot",
+      "summary": "希望保留苏晚角色、精简支线戏份而非整条删除",
+      "comment_ids": [
+        "cm-003",
+        "cm-004"
+      ],
+      "cluster_id": "oc-002",
+      "emerged_at": "2026-09-19T22:10:00+08:00"
+    },
+    {
+      "theme_id": "th-003",
+      "interaction_id": "poll-ep201-subplot",
+      "summary": "把评论区对后续剧情的讨论误读为续篇承诺",
+      "comment_ids": [
+        "cm-005",
+        "cm-006"
+      ],
+      "cluster_id": "oc-003",
+      "emerged_at": "2026-09-19T22:20:00+08:00"
+    }
+  ],
+  "opinion_clusters": [
+    {
+      "cluster_id": "oc-001",
+      "fingerprint": "poll-ep201-subplot|vote_fraud_audit_demand",
+      "description": "同一意见：投票遭刷票污染，要求核查并公开剔除前后结果",
+      "entries": [
+        {
+          "entry_ref": "comment:cm-001",
+          "via": "live_chat"
+        },
+        {
+          "entry_ref": "comment:cm-002",
+          "via": "live_chat"
+        },
+        {
+          "entry_ref": "comment:cm-009",
+          "via": "live_chat"
+        },
+        {
+          "entry_ref": "ticket:tk-001",
+          "via": "support_ticket"
+        }
+      ],
+      "first_verifiable_entry": "comment:cm-001",
+      "claimant_identity_id": "id-001"
+    },
+    {
+      "cluster_id": "oc-002",
+      "fingerprint": "poll-ep201-subplot|keep_character_trim_subplot",
+      "description": "同一意见：保留苏晚、精简支线",
+      "entries": [
+        {
+          "entry_ref": "vote:v-002",
+          "via": "webnovel_poll"
+        },
+        {
+          "entry_ref": "vote:v-005",
+          "via": "live_poll"
+        },
+        {
+          "entry_ref": "vote:v-302",
+          "via": "live_poll"
+        },
+        {
+          "entry_ref": "comment:cm-003",
+          "via": "live_chat"
+        },
+        {
+          "entry_ref": "comment:cm-004",
+          "via": "webnovel_comment"
+        }
+      ],
+      "first_verifiable_entry": "vote:v-002",
+      "claimant_identity_id": "id-001"
+    },
+    {
+      "cluster_id": "oc-003",
+      "fingerprint": "poll-ep201-subplot|sequel_continuation_request",
+      "description": "同一意见：追问续篇/第二季（讨论本身不构成承诺）",
+      "entries": [
+        {
+          "entry_ref": "comment:cm-005",
+          "via": "webnovel_comment"
+        }
+      ],
+      "first_verifiable_entry": "comment:cm-005",
+      "claimant_identity_id": "id-005"
+    }
+  ],
+  "content_units": [
+    {
+      "content_id": "ep-201",
+      "kind": "short_drama_episode",
+      "title": "第201集",
+      "versions": [
+        {
+          "version_id": "ep-201-v0",
+          "state": "working_draft",
+          "created_at": "2026-09-18T15:00:00+08:00",
+          "scenes": [
+            "s1-开场",
+            "s2-苏晚告别",
+            "s3-收尾"
+          ]
+        },
+        {
+          "version_id": "ep-201-v1",
+          "state": "published",
+          "published_at": "2026-09-19T12:00:00+08:00",
+          "content_hash": "sha256:9f3c1e7a0b244d8eb2a51f96cd47a0d8c1e6f0b93a27d440c8e1f52a6b39071d",
+          "immutable": true,
+          "scenes": [
+            "s1-开场",
+            "s3-收尾"
+          ],
+          "note": "直播后临时删除 s2 苏晚告别镜头；该版本已发布，任何重算不得修改，只能以新版本纠正"
+        }
+      ]
+    },
+    {
+      "content_id": "ep-202",
+      "kind": "short_drama_episode",
+      "title": "第202集",
+      "versions": [
+        {
+          "version_id": "ep-202-v1-draft",
+          "state": "private_draft",
+          "created_at": "2026-09-20T08:30:00+08:00",
+          "access_list": [
+            "ed-01",
+            "ed-02",
+            "cr-01"
+          ],
+          "scenes": [
+            "s4-转场",
+            "s5-苏晚补白（恢复角色）",
+            "s6-新钩子"
+          ],
+          "note": "仅对获准编辑与创作者开放"
+        }
+      ]
+    }
+  ],
+  "creator_responses": [
+    {
+      "response_id": "rp-001",
+      "target_ref": "poll:poll-ep201-subplot",
+      "tally_run_id": "tr-002",
+      "decision": "rejected",
+      "rationale": "调整后有效结果为保留 3、删除 0，直播画面上的删除高声量主要由协同刷票与已失效资格构成；且支线取舍仅具咨询性质，不把热度当作删除依据。已发布的 ep-201-v1 不可改动，纠正进入 ep-202。",
+      "decided_by": "cr-01",
+      "decided_at": "2026-09-20T08:00:00+08:00",
+      "visibility": "subscriber_public",
+      "access_list": []
+    },
+    {
+      "response_id": "rp-002",
+      "target_ref": "theme:th-002",
+      "tally_run_id": "tr-002",
+      "decision": "partially_adopted",
+      "rationale": "采纳“保留角色、精简戏份”：在 ep-202 以一场补白戏恢复苏晚，但不恢复完整支线篇幅。",
+      "decided_by": "cr-01",
+      "decided_at": "2026-09-20T08:20:00+08:00",
+      "visibility": "subscriber_public",
+      "access_list": [],
+      "linked_change_id": "ch-ep202-restore"
+    },
+    {
+      "response_id": "rp-003",
+      "target_ref": "theme:th-001",
+      "tally_run_id": "tr-002",
+      "decision": "adopted",
+      "rationale": "启动刷票核查，向订阅者公开原始口径与剔除异常口径的并排结果及全部处理依据。",
+      "decided_by": "ed-01",
+      "decided_at": "2026-09-20T08:10:00+08:00",
+      "visibility": "subscriber_public",
+      "access_list": []
+    },
+    {
+      "response_id": "rp-004",
+      "target_ref": "theme:th-002",
+      "tally_run_id": null,
+      "decision": "partially_adopted",
+      "rationale": "内部草稿：补白戏长度与档期成本待评估，未完成，不得对外。",
+      "decided_by": "ed-02",
+      "decided_at": "2026-09-20T08:25:00+08:00",
+      "visibility": "private_draft",
+      "access_list": [
+        "ed-01",
+        "ed-02"
+      ]
+    },
+    {
+      "response_id": "rp-005",
+      "target_ref": "comment:cm-004",
+      "tally_run_id": null,
+      "decision": "rejected",
+      "rationale": "要求复活已在主线死亡的角色属于不可让渡的主线决定，且与既定世界观结局冲突，拒绝。",
+      "decided_by": "cr-01",
+      "decided_at": "2026-09-20T08:35:00+08:00",
+      "visibility": "editorial",
+      "access_list": [
+        "ed-01",
+        "ed-02",
+        "cr-01"
+      ]
+    }
+  ],
+  "content_changes": [
+    {
+      "change_id": "ch-ep201-cut",
+      "content_id": "ep-201",
+      "from_version_id": "ep-201-v0",
+      "to_version_id": "ep-201-v1",
+      "description": "直播后临时删除 s2 苏晚告别镜头",
+      "basis_run_ids": [
+        "tr-001"
+      ],
+      "editorial_decision_ref": "edec-001",
+      "created_at": "2026-09-19T11:00:00+08:00"
+    },
+    {
+      "change_id": "ch-ep202-restore",
+      "content_id": "ep-202",
+      "from_version_id": null,
+      "to_version_id": "ep-202-v1-draft",
+      "description": "以补白戏恢复苏晚角色，精简支线篇幅",
+      "basis_run_ids": [
+        "tr-002"
+      ],
+      "creator_response_id": "rp-002",
+      "editorial_decision_ref": "edec-002",
+      "created_at": "2026-09-20T08:30:00+08:00"
+    }
+  ],
+  "editorial_decisions": [
+    {
+      "decision_id": "edec-001",
+      "decided_by": "cr-01",
+      "decided_at": "2026-09-18T21:30:00+08:00",
+      "summary": "依据直播现场临时反响决定先删戏；事后核查认定依据不充分，该决定已被 edec-002 纠正",
+      "superseded_by": "edec-002"
+    },
+    {
+      "decision_id": "edec-002",
+      "decided_by": "cr-01",
+      "decided_at": "2026-09-20T08:20:00+08:00",
+      "summary": "依据 tr-002 调整后结果与主题 th-002，恢复角色、精简篇幅",
+      "superseded_by": null
+    }
+  ],
+  "tally_runs": [
+    {
+      "run_id": "tr-001",
+      "interaction_id": "poll-ep201-subplot",
+      "rule_version": "rv-2026-09-18-a",
+      "rules_hash": "sha256:cb3cfaae7a4898ebecc694e1d39656ef4a435cabd22f229864f1b6252727cfb0",
+      "computed_at": "2026-09-18T21:05:00+08:00",
+      "settlement_at": "2026-09-18T21:05:00+08:00",
+      "kind": "live_provisional",
+      "status": "provisional",
+      "supersedes": null,
+      "input_window": {
+        "received_after": null,
+        "received_before": "2026-09-18T21:05:00+08:00"
+      },
+      "adjustments_applied": [],
+      "raw": {
+        "ballots": {
+          "opt-cut": 8,
+          "opt-keep": 3
+        },
+        "note": "原始口径：截止前收到的全部投票事件，未做任何去重、资格或异常剔除"
+      },
+      "adjusted": null
+    },
+    {
+      "run_id": "tr-002",
+      "interaction_id": "poll-ep201-subplot",
+      "rule_version": "rv-2026-09-18-a",
+      "rules_hash": "sha256:cb3cfaae7a4898ebecc694e1d39656ef4a435cabd22f229864f1b6252727cfb0",
+      "computed_at": "2026-09-20T08:00:00+08:00",
+      "settlement_at": "2026-09-20T08:00:00+08:00",
+      "kind": "official_recomputation",
+      "status": "final",
+      "supersedes": "tr-001",
+      "input_window": {
+        "received_after": null,
+        "received_before": "2026-09-20T08:00:00+08:00"
+      },
+      "adjustments_applied": [
+        "adj-001",
+        "adj-002",
+        "adj-003",
+        "adj-004",
+        "adj-005",
+        "adj-006"
+      ],
+      "raw": {
+        "ballots": {
+          "opt-cut": 8,
+          "opt-keep": 3
+        },
+        "note": "原始口径保留：与 tr-001 一致，重算不篡改历史"
+      },
+      "adjusted": {
+        "ballots": {
+          "opt-cut": 0,
+          "opt-keep": 3
+        },
+        "late_separately_recorded": [
+          "v-201"
+        ],
+        "note": "调整口径：去重保留 v-002；退款票、游客票、撤票、协同刷票簇全部剔除；迟到票不计入"
+      },
+      "basis_of": [
+        "ch-ep202-restore"
+      ]
+    }
+  ],
+  "subscriber_promises": [
+    {
+      "promise_id": "pr-001",
+      "made_by": "cr-01",
+      "made_at": "2026-09-19T22:30:00+08:00",
+      "scope": "subscribers",
+      "statement": "苏晚的归宿将在续篇/番外中正式交代。",
+      "origin_note": "网文评论区曾把一般讨论误读为续篇承诺；编辑部核实后将作者确认的这句话登记为唯一正式承诺，其余讨论不视为承诺。",
+      "status": "open",
+      "due_at": "2026-12-31T23:59:59+08:00",
+      "history": [
+        {
+          "at": "2026-09-19T22:30:00+08:00",
+          "from_status": null,
+          "to_status": "open",
+          "by": "cr-01",
+          "note": "正式登记"
+        },
+        {
+          "at": "2026-09-20T09:00:00+08:00",
+          "from_status": "open",
+          "to_status": "open",
+          "by": "ed-01",
+          "note": "编辑部核验：状态可查，兑现证据待补"
+        }
+      ],
+      "verification": {
+        "kind": "future_content",
+        "expected_ref": "续篇或番外中苏晚归宿相关章节",
+        "evidence_content_id": null,
+        "evidence_hash": null
+      }
+    },
+    {
+      "promise_id": "pr-002",
+      "made_by": "ed-01",
+      "made_at": "2026-09-19T12:30:00+08:00",
+      "scope": "subscribers",
+      "statement": "48 小时内向订阅者公开本场投票的核查结果。",
+      "origin_note": "针对付费观众质疑作出的正式承诺。",
+      "status": "fulfilled",
+      "due_at": "2026-09-21T12:30:00+08:00",
+      "history": [
+        {
+          "at": "2026-09-19T12:30:00+08:00",
+          "from_status": null,
+          "to_status": "open",
+          "by": "ed-01",
+          "note": "正式登记"
+        },
+        {
+          "at": "2026-09-20T08:05:00+08:00",
+          "from_status": "open",
+          "to_status": "fulfilled",
+          "by": "ed-01",
+          "note": "核查公告发布"
+        }
+      ],
+      "verification": {
+        "kind": "published_post",
+        "expected_ref": "post-2026-09-20-audit",
+        "evidence_content_id": "post-2026-09-20-audit",
+        "evidence_hash": "sha256:2c6f4a91d3e74b0896adf0f9b85c2d74e1a3b6c90d2f4718ae5c0d93b72e6f14"
+      }
+    }
+  ],
+  "reward_settlements": [
+    {
+      "settlement_id": "rs-001",
+      "period": "2026-09",
+      "cluster_id": "oc-001",
+      "payee_identity_id": "id-001",
+      "amount": 50,
+      "currency": "CNY",
+      "entries_merged": [
+        "comment:cm-001",
+        "comment:cm-002",
+        "comment:cm-009",
+        "ticket:tk-001"
+      ],
+      "status": "paid",
+      "paid_at": "2026-09-20T08:50:00+08:00",
+      "basis": "同一核查意见虽在直播弹幕与工单多个入口出现，按意见聚类只计酬一次，付给最早可核验提出者"
+    },
+    {
+      "settlement_id": "rs-002",
+      "period": "2026-09",
+      "cluster_id": "oc-001",
+      "payee_identity_id": "id-007",
+      "amount": 0,
+      "currency": "CNY",
+      "entries_merged": [
+        "comment:cm-009"
+      ],
+      "status": "denied_duplicate",
+      "paid_at": null,
+      "basis": "与 rs-001 属同一意见聚类 oc-001，已计酬，重复申请拒绝"
+    }
+  ]
 }
